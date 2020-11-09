@@ -12,6 +12,8 @@ public interface UserDao {
 
 	public List<User> findAll();
 
+	public List<User> findByCondition(User user);
+
 	public void saveUser(User user);
 
 	public void updateUser(User user);

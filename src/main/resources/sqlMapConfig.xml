@@ -2,16 +2,27 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+
+    <properties resource="jdbc.properties"/>
+
+    <!--给实体类的全限定名起别名-->
+    <typeAliases>
+        <!--单独实体起别名-->
+<!--        <typeAlias type="com.zxr.pojo.User" alias="user"/>-->
+        <!--别名是类名，不区分大小写-->
+        <package name="com.zxr.pojo"/>
+    </typeAliases>
+
     <environments default="development">
         <environment id="development">
             <!--当前事务交给JDBC进行管理-->
             <transactionManager type="JDBC" />
             <!--使用mybatis提供的连接池-->
             <dataSource type="POOLED">
-                <property name="driver" value="com.mysql.jdbc.Driver"/>
-                <property name="url" value="jdbc:mysql://119.45.236.54:3306/mybatis?serverTimezone=GMT%2B8"/>
-                <property name="username" value="root"/>
-                <property name="password" value="123456"/>
+                <property name="driver" value="${jdbc.driver}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.username}"/>
+                <property name="password" value="${jdbc.password}"/>
             </dataSource>
         </environment>
     </environments>

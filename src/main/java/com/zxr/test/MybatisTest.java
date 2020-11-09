@@ -70,4 +70,21 @@ public class MybatisTest {
 		System.out.println(all);
 
 	}
+
+	@Test
+	public void test03() throws IOException {
+		//1.加载配置文件，加载为输入流
+		InputStream resourceAsStream = Resources.getResourceAsStream("sqlMapConfig.xml");
+		//2.解析配置文件，创建sqlSessionFactory工厂
+		SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(resourceAsStream);
+		//3.生产sqlSession
+		SqlSession sqlSession = sqlSessionFactory.openSession(true);//开启一个事务，默认不默认提交
+		//增删改时需要手动提交
+		//
+		UserDao userMapper = sqlSession.getMapper(UserDao.class);
+		User user = new User();
+		user.setId(6);
+		List<User> byCondition = userMapper.findByCondition(user);
+		System.out.println(byCondition);
+	}
 }

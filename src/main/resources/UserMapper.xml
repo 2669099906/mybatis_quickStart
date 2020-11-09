@@ -5,23 +5,35 @@
 <mapper namespace="com.zxr.dao.UserDao">
 
     <!--查询用户-->
-    <select id="findAll" resultType="com.zxr.pojo.User">
+    <select id="findAll" resultType="user">
         select * from user
+    </select>
+
+    <select id="findByCondition" resultType="user" parameterType="user">
+        select * from user
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="username!=null">
+                and username = #{username}
+            </if>
+        </where>
     </select>
 
     <!--添加用户-->
     <!--parameterType 参数类型-->
-    <insert id="saveUser" parameterType="com.zxr.pojo.User">
+    <insert id="saveUser" parameterType="user">
         insert into user values (#{id}, #{username})
     </insert>
 
     <!--修改用户-->
-    <update id="updateUser" parameterType="com.zxr.pojo.User">
+    <update id="updateUser" parameterType="user">
         update user set username = #{username} where id = #{id}
     </update>
 
     <!--删除用户-->
-    <delete id="deleteUser" parameterType="java.lang.Integer">
+    <delete id="deleteUser" parameterType="int">
         delete from user where id = #{id}
     </delete>
 
