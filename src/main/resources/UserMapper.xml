@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxr.dao.UserDao">
+
+    <!--查询用户-->
+    <select id="findAll" resultType="com.zxr.pojo.User">
+        select * from user
+    </select>
+
+    <!--添加用户-->
+    <!--parameterType 参数类型-->
+    <insert id="saveUser" parameterType="com.zxr.pojo.User">
+        insert into user values (#{id}, #{username})
+    </insert>
+
+    <!--修改用户-->
+    <update id="updateUser" parameterType="com.zxr.pojo.User">
+        update user set username = #{username} where id = #{id}
+    </update>
+
+    <!--删除用户-->
+    <delete id="deleteUser" parameterType="java.lang.Integer">
+        delete from user where id = #{id}
+    </delete>
+
+</mapper>
