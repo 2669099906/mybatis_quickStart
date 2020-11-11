@@ -9,6 +9,7 @@ public class Order {
     private Integer id;
     private String orderTime;
     private Double total;
+    private Integer uid;
     private User user;
 
     public User getUser() {

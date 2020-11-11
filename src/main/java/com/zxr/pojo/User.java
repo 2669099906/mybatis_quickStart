@@ -1,5 +1,6 @@
 package com.zxr.pojo;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -9,11 +10,10 @@ import java.util.List;
 public class User {
 
 	private Integer id;
-
 	private String username;
-
+	private String password;
+	private Date birthday;
 	private List<Role> roles;
-
 	private List<Order> orderList;
 
 	public List<Order> getOrderList() {
