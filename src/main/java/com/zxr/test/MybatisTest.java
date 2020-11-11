@@ -1,7 +1,9 @@
 package com.zxr.test;
 
 
+import com.zxr.dao.OrderMapper;
 import com.zxr.dao.UserDao;
+import com.zxr.pojo.Order;
 import com.zxr.pojo.User;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -11,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -83,8 +86,64 @@ public class MybatisTest {
 		//
 		UserDao userMapper = sqlSession.getMapper(UserDao.class);
 		User user = new User();
-		user.setId(6);
+		user.setId(1);
 		List<User> byCondition = userMapper.findByCondition(user);
 		System.out.println(byCondition);
+	}
+
+	@Test
+	public void test04() throws IOException {
+		//1.加载配置文件，加载为输入流
+		InputStream resourceAsStream = Resources.getResourceAsStream("sqlMapConfig.xml");
+		//2.解析配置文件，创建sqlSessionFactory工厂
+		SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(resourceAsStream);
+		//3.生产sqlSession
+		SqlSession sqlSession = sqlSessionFactory.openSession(true);//开启一个事务，默认不默认提交
+		//增删改时需要手动提交
+		UserDao mapper = sqlSession.getMapper(UserDao.class);
+		List<User> byIds = mapper.findByIds(Arrays.asList(1, 2, 4));
+		System.out.println(byIds);
+	}
+
+	@Test
+	public void test05() throws IOException {
+		//1.加载配置文件，加载为输入流
+		InputStream resourceAsStream = Resources.getResourceAsStream("sqlMapConfig.xml");
+		//2.解析配置文件，创建sqlSessionFactory工厂
+		SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(resourceAsStream);
+		//3.生产sqlSession
+		SqlSession sqlSession = sqlSessionFactory.openSession(true);//开启一个事务，默认不默认提交
+		//增删改时需要手动提交
+		OrderMapper mapper = sqlSession.getMapper(OrderMapper.class);
+		List<Order> orderAndUser = mapper.findOrderAndUser();
+		System.out.println(orderAndUser);
+	}
+
+	@Test
+	public void test06() throws IOException {
+		//1.加载配置文件，加载为输入流
+		InputStream resourceAsStream = Resources.getResourceAsStream("sqlMapConfig.xml");
+		//2.解析配置文件，创建sqlSessionFactory工厂
+		SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(resourceAsStream);
+		//3.生产sqlSession
+		SqlSession sqlSession = sqlSessionFactory.openSession(true);//开启一个事务，默认不默认提交
+		//增删改时需要手动提交
+		UserDao mapper = sqlSession.getMapper(UserDao.class);
+		List<User> userAndOrder = mapper.findUserAndOrder();
+		System.out.println(userAndOrder);
+	}
+
+	@Test
+	public void test07() throws IOException {
+		//1.加载配置文件，加载为输入流
+		InputStream resourceAsStream = Resources.getResourceAsStream("sqlMapConfig.xml");
+		//2.解析配置文件，创建sqlSessionFactory工厂
+		SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(resourceAsStream);
+		//3.生产sqlSession
+		SqlSession sqlSession = sqlSessionFactory.openSession(true);//开启一个事务，默认不默认提交
+		//增删改时需要手动提交
+		UserDao mapper = sqlSession.getMapper(UserDao.class);
+		List<User> userAndRole = mapper.findUserAndRole();
+		System.out.println(userAndRole);
 	}
 }

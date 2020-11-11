@@ -1,5 +1,6 @@
 package com.zxr.dao;
 
+import com.zxr.pojo.Order;
 import com.zxr.pojo.User;
 
 import java.util.List;
@@ -10,13 +11,20 @@ import java.util.List;
  */
 public interface UserDao {
 
-	public List<User> findAll();
+	List<User> findAll();
 
-	public List<User> findByCondition(User user);
+	List<User> findByCondition(User user);
 
-	public void saveUser(User user);
+	void saveUser(User user);
 
-	public void updateUser(User user);
+	void updateUser(User user);
 
-	public void deleteUser(Integer userId);
+	void deleteUser(Integer userId);
+
+	//多值查询 foreach
+	List<User> findByIds(List<Integer> ids);
+
+	List<User> findUserAndOrder();
+
+	List<User> findUserAndRole();
 }

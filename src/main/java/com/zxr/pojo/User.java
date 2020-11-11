@@ -1,5 +1,7 @@
 package com.zxr.pojo;
 
+import java.util.List;
+
 /**
  * @Author zhaoxiangrui
  * @create 2020/11/9 15:39
@@ -10,12 +12,16 @@ public class User {
 
 	private String username;
 
-	@Override
-	public String toString() {
-		return "User{" +
-				"id=" + id +
-				", username='" + username + '\'' +
-				'}';
+	private List<Role> roles;
+
+	private List<Order> orderList;
+
+	public List<Order> getOrderList() {
+		return orderList;
+	}
+
+	public void setOrderList(List<Order> orders) {
+		this.orderList = orders;
 	}
 
 	public Integer getId() {
@@ -32,5 +38,15 @@ public class User {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	@Override
+	public String toString() {
+		return "User{" +
+				"id=" + id +
+				", username='" + username + '\'' +
+				", roles=" + roles +
+				", orderList=" + orderList +
+				'}';
 	}
 }
