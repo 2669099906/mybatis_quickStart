@@ -9,6 +9,8 @@ import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -21,6 +23,8 @@ import java.util.List;
  * @create 2020/11/9 16:13
  */
 public class MybatisTest {
+
+	private static UserDao userDao;
 
 	@Test
 	public void test() throws Exception {
@@ -146,4 +150,34 @@ public class MybatisTest {
 		List<User> userAndRole = mapper.findUserAndRole();
 		System.out.println(userAndRole);
 	}
+
+	@BeforeEach
+	public void before() throws IOException {
+		//1.加载配置文件，加载为输入流
+		InputStream resourceAsStream = Resources.getResourceAsStream("sqlMapConfig.xml");
+		//2.解析配置文件，创建sqlSessionFactory工厂
+		SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(resourceAsStream);
+		//3.生产sqlSession
+		SqlSession sqlSession = sqlSessionFactory.openSession(true);//开启一个事务，默认不默认提交
+		//增删改时需要手动提交
+		userDao = sqlSession.getMapper(UserDao.class);
+	}
+
+
+	@Test
+	public void test08() throws IOException {
+		User user = new User();
+		user.setId(5);
+		user.setUsername("dingding");
+		userDao.addUser(user);
+	}
+
+	@Test
+	public void test09(){
+		User user = new User();
+		user.setId(5);
+		user.setUsername("jack");
+		userDao.updateUser(user);
+	}
+
 }

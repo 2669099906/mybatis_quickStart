@@ -17,12 +17,6 @@ public interface OrderMapper {
 
     List<Order> findOrderAndUser();
 
-    /**
-     *  private Integer id;
-     *     private String orderTime;
-     *     private Double total;
-     * @return
-     */
     @Select("select * from orders")
     @Results({
             @Result(id = true, property = "id", column = "id"),

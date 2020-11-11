@@ -2,10 +2,7 @@ package com.zxr.dao;
 
 import com.zxr.pojo.Order;
 import com.zxr.pojo.User;
-import org.apache.ibatis.annotations.Many;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -21,6 +18,7 @@ public interface UserDao {
 
 	void saveUser(User user);
 
+	@Update("update user set username=#{username} where id=#{id}")
 	void updateUser(User user);
 
 	void deleteUser(Integer userId);
@@ -30,26 +28,24 @@ public interface UserDao {
 
 	List<User> findUserAndOrder();
 
-	/**
-	 * private Integer id;
-	 * 	private String username;
-	 * 	private String password;
-	 * 	private Date birthday;
-	 * @return
-	 */
+	//添加用户
+	@Insert("insert into user values(#{id}, #{username})")
+	void addUser(User user);
+
+
 	@Select("select * from user")
 	@Results({
 			@Result(id = true, property = "id", column = "id"),
 			@Result(property = "username", column = "username"),
 			@Result(property = "password", column = "password"),
 			@Result(property = "birthday", column = "birthday"),
-			@Result(property = "orders", column = "uid",
-					javaType = List.class, many = @Many(select = "com.zxr.dao.OrderMapper."))
+			@Result(property = "orderList", column = "uid",
+					javaType = List.class, many = @Many(select = "com.zxr.dao.OrderMapper.findByUserId"))
 	})
 	List<User> findAllUserAndOrder();
 
 	List<User> findUserAndRole();
 
 	@Select("select * from user where id = #{id}")
-	User findById();
+	User findById(Integer userId);
 }
