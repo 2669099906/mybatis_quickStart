@@ -1,12 +1,11 @@
 package com.zxr.test;
 
-import com.zxr.dao.UserDao;
+import com.zxr.dao.UserMapper;
 import com.zxr.pojo.User;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +18,7 @@ import java.io.InputStream;
  */
 public class CacheTest {
 
-    private UserDao userDao;
+    private UserMapper userMapper;
     private SqlSession sqlSession;
 
     @BeforeEach
@@ -31,18 +30,18 @@ public class CacheTest {
         //3.生产sqlSession
         sqlSession = sqlSessionFactory.openSession();//开启一个事务，默认不默认提交
         //增删改时需要手动提交
-        userDao = sqlSession.getMapper(UserDao.class);
+        userMapper = sqlSession.getMapper(UserMapper.class);
     }
 
     @Test
     public void test01(){
         //第一次查询id为1的用户
-        User user = userDao.findById(1);
+        User user = userMapper.findById(1);
         User user1 = new User();
         user1.setUsername("tom");
         user1.setId(2);
-        userDao.updateUser(user1);
-        User user2 = userDao.findById(1);
+        userMapper.updateUser(user1);
+        User user2 = userMapper.findById(1);
         sqlSession.commit();
         System.out.println( user == user2);
     }

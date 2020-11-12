@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxr.dao.UserMapperXml">
+
+
+    <!--抽取sql片段-->
+    <sql id="selectUser">
+        select * from user
+    </sql>
+
+    <!--查询用户-->
+    <select id="findAll" resultType="user">
+        <include refid="selectUser"/>
+    </select>
+
+    <select id="findByCondition" resultType="user" parameterType="user">
+        <include refid="selectUser"/>
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="username!=null">
+                and username = #{username}
+            </if>
+        </where>
+    </select>
+
+    <select id="findByIds" parameterType="list" resultType="user">
+        <include refid="selectUser"/>
+        <where>
+            <foreach collection="list" open="id in ("  item="id" close=")" separator=",">
+                #{id}
+            </foreach>
+        </where>
+    </select>
+
+    <!--添加用户-->
+    <!--parameterType 参数类型-->
+    <insert id="saveUser" parameterType="user">
+        insert into user values (#{id}, #{username})
+    </insert>
+
+    <!--修改用户-->
+    <update id="updateUser" parameterType="user">
+        update user set username = #{username} where id = #{id}
+    </update>
+
+    <!--删除用户-->
+    <delete id="deleteUser" parameterType="int">
+        delete from user where id = #{id}
+    </delete>
+
+
+    <resultMap id="userMap" type="user">
+        <id property="id" column="id"/>
+        <result property="username" column="username"/>
+        <collection property="orderList"  javaType="list" ofType="com.zxr.pojo.Order">
+            <id property="id" column="orderId"/>
+            <result property="total" column="total"/>
+            <result property="orderTime" column="orderTime"/>
+        </collection>
+    </resultMap>
+    
+    
+    <select id="findUserAndOrder" resultMap="userMap">
+        SELECT u.*, o.`id` AS orderId, o.`ordertime`, o.`total`, o.`uid` FROM USER u JOIN ORDERS o ON o.`uid`=u.`id`
+    </select>
+
+    <resultMap id="userRoleMap" type="user">
+        <id property="id" column="userid"/>
+        <result property="username" column="username"/>
+        <collection property="roles" javaType="list" ofType="role">
+            <result property="id" column="roleid"/>
+            <result property="roleName" column="roleName"/>
+            <result property="roleDesc" column="roleDesc"/>
+        </collection>
+    </resultMap>
+
+    <select id="findUserAndRole" resultMap="userRoleMap">
+        SELECT * FROM USER u
+            LEFT JOIN sys_user_role ur
+            ON u.id=ur.userid
+            LEFT JOIN sys_role sr
+            ON ur.roleid = sr.id
+    </select>
+
+</mapper>

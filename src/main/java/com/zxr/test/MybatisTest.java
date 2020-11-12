@@ -2,20 +2,22 @@ package com.zxr.test;
 
 
 import com.zxr.dao.OrderMapper;
-import com.zxr.dao.UserDao;
+import com.zxr.dao.OrderMapperXml;
+import com.zxr.dao.UserMapper;
+import com.zxr.dao.UserMapperXml;
 import com.zxr.pojo.Order;
 import com.zxr.pojo.User;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -24,7 +26,10 @@ import java.util.List;
  */
 public class MybatisTest {
 
-	private static UserDao userDao;
+	private UserMapperXml userMapperXml;
+	private UserMapper userMapper;
+	private OrderMapper orderMapper;
+	private OrderMapperXml orderMapperXml;
 
 	@Test
 	public void test() throws Exception {
@@ -37,7 +42,7 @@ public class MybatisTest {
 																				//增删改时需要手动提交
 																				//
 		//4.调用selectList查询多条数据，selectOne查询单条数据，update更新数据 insert添加数据 delete 删除数据
-		List<User> userList = sqlSession.selectList(UserDao.class.getName() + "." + "findAll");
+		List<User> userList = sqlSession.selectList(UserMapperXml.class.getName() + "." + "findAll");
 		System.out.println(userList);
 //		User user = new User();
 //		user.setId(5);
@@ -50,8 +55,8 @@ public class MybatisTest {
 		User user = new User();
 		user.setId(4);
 		user.setUsername("jack");
-		sqlSession.delete(UserDao.class.getName() +"."+ "deleteUser", user);
-		userList = sqlSession.selectList(UserDao.class.getName() + "." + "findAll");
+		sqlSession.delete(UserMapperXml.class.getName() +"."+ "deleteUser", user);
+		userList = sqlSession.selectList(UserMapperXml.class.getName() + "." + "findAll");
 		System.out.println(userList);
 		sqlSession.close();
 	}
@@ -66,7 +71,7 @@ public class MybatisTest {
 		SqlSession sqlSession = sqlSessionFactory.openSession(true);//开启一个事务，默认不默认提交
 		//增删改时需要手动提交
 		//
-		UserDao userMapper = sqlSession.getMapper(UserDao.class);
+		UserMapperXml userMapper = sqlSession.getMapper(UserMapperXml.class);
 		List<User> all = userMapper.findAll();
 		System.out.println(all);
 		User user = new User();
@@ -88,7 +93,7 @@ public class MybatisTest {
 		SqlSession sqlSession = sqlSessionFactory.openSession(true);//开启一个事务，默认不默认提交
 		//增删改时需要手动提交
 		//
-		UserDao userMapper = sqlSession.getMapper(UserDao.class);
+		UserMapperXml userMapper = sqlSession.getMapper(UserMapperXml.class);
 		User user = new User();
 		user.setId(1);
 		List<User> byCondition = userMapper.findByCondition(user);
@@ -104,7 +109,7 @@ public class MybatisTest {
 		//3.生产sqlSession
 		SqlSession sqlSession = sqlSessionFactory.openSession(true);//开启一个事务，默认不默认提交
 		//增删改时需要手动提交
-		UserDao mapper = sqlSession.getMapper(UserDao.class);
+		UserMapperXml mapper = sqlSession.getMapper(UserMapperXml.class);
 		List<User> byIds = mapper.findByIds(Arrays.asList(1, 2, 4));
 		System.out.println(byIds);
 	}
@@ -118,7 +123,7 @@ public class MybatisTest {
 		//3.生产sqlSession
 		SqlSession sqlSession = sqlSessionFactory.openSession(true);//开启一个事务，默认不默认提交
 		//增删改时需要手动提交
-		OrderMapper mapper = sqlSession.getMapper(OrderMapper.class);
+		OrderMapperXml mapper = sqlSession.getMapper(OrderMapperXml.class);
 		List<Order> orderAndUser = mapper.findOrderAndUser();
 		System.out.println(orderAndUser);
 	}
@@ -132,7 +137,7 @@ public class MybatisTest {
 		//3.生产sqlSession
 		SqlSession sqlSession = sqlSessionFactory.openSession(true);//开启一个事务，默认不默认提交
 		//增删改时需要手动提交
-		UserDao mapper = sqlSession.getMapper(UserDao.class);
+		UserMapperXml mapper = sqlSession.getMapper(UserMapperXml.class);
 		List<User> userAndOrder = mapper.findUserAndOrder();
 		System.out.println(userAndOrder);
 	}
@@ -146,7 +151,7 @@ public class MybatisTest {
 		//3.生产sqlSession
 		SqlSession sqlSession = sqlSessionFactory.openSession(true);//开启一个事务，默认不默认提交
 		//增删改时需要手动提交
-		UserDao mapper = sqlSession.getMapper(UserDao.class);
+		UserMapperXml mapper = sqlSession.getMapper(UserMapperXml.class);
 		List<User> userAndRole = mapper.findUserAndRole();
 		System.out.println(userAndRole);
 	}
@@ -160,16 +165,21 @@ public class MybatisTest {
 		//3.生产sqlSession
 		SqlSession sqlSession = sqlSessionFactory.openSession(true);//开启一个事务，默认不默认提交
 		//增删改时需要手动提交
-		userDao = sqlSession.getMapper(UserDao.class);
+		userMapperXml = sqlSession.getMapper(UserMapperXml.class);
+		userMapper = sqlSession.getMapper(UserMapper.class);
+		orderMapper = sqlSession.getMapper(OrderMapper.class);
+		orderMapperXml = sqlSession.getMapper(OrderMapperXml.class);
 	}
 
 
 	@Test
-	public void test08() throws IOException {
+	public void test08() {
 		User user = new User();
-		user.setId(5);
-		user.setUsername("dingding");
-		userDao.addUser(user);
+		user.setId(3);
+		user.setUsername("max");
+		user.setBirthday(new Date());
+		user.setPassword("123456");
+		userMapper.addUser(user);
 	}
 
 	@Test
@@ -177,7 +187,24 @@ public class MybatisTest {
 		User user = new User();
 		user.setId(5);
 		user.setUsername("jack");
-		userDao.updateUser(user);
+		userMapper.updateUser(user);
 	}
 
+	@Test
+	public void test10(){
+		List<User> allUserAndOrder = userMapper.findAllUserAndOrder();
+		System.out.println(allUserAndOrder);
+	}
+
+	@Test
+	public void test11(){
+		List<Order> all = orderMapper.findAll();
+		System.out.println(all);
+	}
+
+	@Test
+	public void test12(){
+		List<Order> findOrderByUserId = orderMapper.findByUserId(1);
+		System.out.println(findOrderByUserId);
+	}
 }

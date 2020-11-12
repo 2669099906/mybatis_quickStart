@@ -29,8 +29,6 @@
 
     <!--引入映射配置文件-->
     <mappers>
-<!--        <mapper resource="UserMapper.xml"/>-->
-<!--        <mapper resource="OrderMapper.xml"/>-->
         <package name="com.zxr.dao"/>
     </mappers>
 </configuration>

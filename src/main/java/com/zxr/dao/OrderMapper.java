@@ -15,8 +15,6 @@ import java.util.List;
  */
 public interface OrderMapper {
 
-    List<Order> findOrderAndUser();
-
     @Select("select * from orders")
     @Results({
             @Result(id = true, property = "id", column = "id"),
@@ -24,11 +22,11 @@ public interface OrderMapper {
             @Result(property = "total", column = "total"),
             @Result(property = "user", column = "uid",
                     javaType = User.class,
-                    one = @One(select = "com.zxr.dao.UserDao.findById"))
+                    one = @One(select = "com.zxr.dao.UserMapper.findById"))
     })
     List<Order> findAll();
 
-    @Select("select * form order where uid = #{uid}")
+    @Select("select * from orders where uid = #{uid}")
     List<Order> findByUserId(Integer uid);
 
 }
