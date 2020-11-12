@@ -1,5 +1,6 @@
 package com.zxr.pojo;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -7,7 +8,8 @@ import java.util.List;
  * @Author zhaoxiangrui
  * @create 2020/11/9 15:39
  */
-public class User {
+//开启二级缓存需要实现序列化，因为二级缓存不一定全部存储在内存中，也会存储在其他持久化组件中
+public class User implements Serializable {
 
 	private Integer id;
 	private String username;

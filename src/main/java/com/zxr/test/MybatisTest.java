@@ -207,4 +207,10 @@ public class MybatisTest {
 		List<Order> findOrderByUserId = orderMapper.findByUserId(1);
 		System.out.println(findOrderByUserId);
 	}
+
+	@Test
+	public void test13(){
+		List<User> allUserAndRole = userMapper.findAllUserAndRole();
+		allUserAndRole.forEach(System.out::println);
+	}
 }

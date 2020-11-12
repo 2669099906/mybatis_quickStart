@@ -2,10 +2,7 @@ package com.zxr.dao;
 
 import com.zxr.pojo.Order;
 import com.zxr.pojo.User;
-import org.apache.ibatis.annotations.One;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -13,6 +10,7 @@ import java.util.List;
  * @author zhaoxiangrui
  * @date 2020/11/10 22:23
  */
+@CacheNamespace
 public interface OrderMapper {
 
     @Select("select * from orders")
