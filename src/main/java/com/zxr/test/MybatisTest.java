@@ -1,10 +1,9 @@
 package com.zxr.test;
 
 
-import com.zxr.dao.OrderMapper;
-import com.zxr.dao.OrderMapperXml;
-import com.zxr.dao.UserMapper;
-import com.zxr.dao.UserMapperXml;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.zxr.dao.*;
 import com.zxr.pojo.Order;
 import com.zxr.pojo.User;
 import org.apache.ibatis.io.Resources;
@@ -13,6 +12,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tk.mybatis.mapper.entity.Example;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,6 +30,7 @@ public class MybatisTest {
 	private UserMapper userMapper;
 	private OrderMapper orderMapper;
 	private OrderMapperXml orderMapperXml;
+	private AutoUserMapper autoUserMapper;
 
 	@Test
 	public void test() throws Exception {
@@ -169,6 +170,7 @@ public class MybatisTest {
 		userMapper = sqlSession.getMapper(UserMapper.class);
 		orderMapper = sqlSession.getMapper(OrderMapper.class);
 		orderMapperXml = sqlSession.getMapper(OrderMapperXml.class);
+		autoUserMapper = sqlSession.getMapper(AutoUserMapper.class);
 	}
 
 
@@ -177,8 +179,8 @@ public class MybatisTest {
 		User user = new User();
 		user.setId(3);
 		user.setUsername("max");
-		user.setBirthday(new Date());
-		user.setPassword("123456");
+//		user.setBirthday(new Date());
+//		user.setPassword("123456");
 		userMapper.addUser(user);
 	}
 
@@ -213,4 +215,32 @@ public class MybatisTest {
 		List<User> allUserAndRole = userMapper.findAllUserAndRole();
 		allUserAndRole.forEach(System.out::println);
 	}
+
+	@Test
+	public void test14(){
+		PageHelper.startPage(1, 2);
+		List<User> allUserAndRole = userMapper.findAllUserAndRole();
+		allUserAndRole.forEach(System.out::println);
+		PageInfo<User> userPageInfo = new PageInfo<User>(allUserAndRole);
+		System.out.println("当前页数："+userPageInfo.getPageNum());
+		System.out.println("总页数："+userPageInfo.getPages());
+		System.out.println("当前页条数："+userPageInfo.getPageSize());
+		System.out.println("总条数："+userPageInfo.getTotal());
+	}
+
+	@Test
+	public void test15(){
+		User user = new User();
+		user.setId(1);
+		User user1 = autoUserMapper.selectOne(user);
+		System.out.println(user1);
+
+		//2.example
+		Example example = new Example(User.class);
+		Example.Criteria criteria = example.createCriteria();
+		criteria.andEqualTo("id", 1);
+		List<User> users = autoUserMapper.selectByExample(example);
+		System.out.println(users);
+	}
+
 }
